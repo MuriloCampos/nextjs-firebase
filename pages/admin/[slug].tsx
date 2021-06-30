@@ -19,14 +19,20 @@ export default function AdminPostEdit(props) {
   );
 }
 
+interface Post {
+  title: string;
+  slug: string;
+  username: string;
+}
+
 function PostManager() {
   const [preview, setPreview] = useState(false);
 
   const router = useRouter();
   const { slug } = router.query;
 
-  const postRef = firestore.collection('users').doc(auth.currentUser.uid).collection('posts').doc(slug);
-  const [post] = useDocumentData(postRef);
+  const postRef = firestore.collection('users').doc(auth.currentUser.uid).collection('posts').doc(typeof slug == "string" ? slug : slug[0]);
+  const [post] = useDocumentData<Post>(postRef);
 
   return (
     <main className={styles.container}>
